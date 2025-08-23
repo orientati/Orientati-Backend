@@ -1,0 +1,42 @@
+services:
+  gateway-migrate:
+    build: ./fastapi-gateway
+    command: alembic upgrade head   # sovrascrive il comando di avvio eseguendo solo le migrazioni
+    env_file: .env
+    depends_on:
+      - db
+    networks:
+      - backend_net
+    deploy:
+      replicas: 1   # forza una sola istanza
+    restart: "no"   # non viene riavviato
+
+  gateway:
+    build: ./fastapi-gateway
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - gateway-migrate
+    networks:
+      - backend_net
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: gateway
+    ports:
+        - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend_net
+
+networks:
+  backend_net:
+
+volumes:
+  db_data:

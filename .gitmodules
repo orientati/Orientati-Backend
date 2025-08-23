@@ -1,0 +1,3 @@
+[submodule "fastapi-gateway"]
+	path = fastapi-gateway
+	url = https://github.com/orientati/fastapi-gateway
