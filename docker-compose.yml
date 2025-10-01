@@ -4,7 +4,7 @@ services:
     command: alembic upgrade head   # sovrascrive il comando di avvio eseguendo solo le migrazioni
     env_file: .env
     depends_on:
-      - db
+      - gateway_db
     networks:
       - backend_net
     deploy:
@@ -17,7 +17,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - gateway_db
       - gateway-migrate
     networks:
       - backend_net
@@ -35,7 +35,7 @@ services:
     networks:
       - backend_net
 
-  KMS-service:
+  kms-service:
     build: ./KMS-service
     env_file: .env
     networks:
