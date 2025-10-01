@@ -22,7 +22,7 @@ services:
     networks:
       - backend_net
 
-  db:
+  gateway_db:
     image: postgres:16
     environment:
       POSTGRES_USER: user
@@ -34,6 +34,14 @@ services:
       - db_data:/var/lib/postgresql/data
     networks:
       - backend_net
+
+  KMS-service:
+    build: ./KMS-service
+    env_file: .env
+    networks:
+      - backend_net
+    deploy:
+      replicas: 1   # forza una sola istanza, altrimenti si avrebbero certificati diversi
 
 networks:
   backend_net:
