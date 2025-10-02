@@ -1,7 +1,7 @@
 services:
   rabbitmq:
     extends:
-      file: RabbitMQ/docker-compose.yml
+      file: RabbitMQ/docker-compose.override.yml
       service: rabbitmq
 
   gateway-migrate:
