@@ -24,8 +24,10 @@ services:
     depends_on:
       - gateway_db
       - gateway-migrate
+      - rabbitmq
     networks:
       - backend_net
+      - micro_net
 
   gateway_db:
     image: postgres:16

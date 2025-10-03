@@ -1,6 +1,7 @@
 [submodule "fastapi-gateway"]
 	path = fastapi-gateway
 	url = https://github.com/orientati/fastapi-gateway
+	branch = develop
 [submodule "KMS-service"]
 	path = KMS-service
 	url = https://github.com/orientati/KMS-service

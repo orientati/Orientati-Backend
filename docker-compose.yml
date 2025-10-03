@@ -12,6 +12,7 @@ services:
       - gateway_db
     networks:
       - backend_net
+      - micro_net
     deploy:
       replicas: 1   # forza una sola istanza
     restart: "no"   # non viene riavviato
@@ -24,6 +25,7 @@ services:
     depends_on:
       - gateway_db
       - gateway-migrate
+      - rabbitmq
     networks:
       - backend_net
 
