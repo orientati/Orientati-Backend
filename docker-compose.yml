@@ -10,27 +10,17 @@ services:
   # DATABASE
   ########################
 
-  users-service_db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: users_service
-    ports:
-      - "5432:5432"
-    volumes:
-      - users_service_db_data:/var/lib/postgresql/data
-    networks:
-      - backend_net
-      - micro_net
-    restart: unless-stopped
-
   gateway_db:
     extends:
       file: ./fastapi-gateway/docker-compose.yml
       service: gateway_db
     env_file: .env
 
+  users-service_db:
+    extends:
+      file: ./users-service/docker-compose.yml
+      service: users-service_db
+    env_file: .env
 
   ########################
   # MIGRAZIONI
@@ -43,23 +33,27 @@ services:
     env_file: .env
 
   users-service-migrate:
-    build: ./users-service
-    command: alembic upgrade head   # sovrascrive il comando di avvio eseguendo solo le migrazioni
+    extends:
+      file: ./users-service/docker-compose.yml
+      service: users-service-migrate
     env_file: .env
-    depends_on:
-      - users-service_db
-    networks:
-      - backend_net
-      - micro_net
-    deploy:
-      replicas: 1   # forza una sola istanza
-    restart: "no"   # non viene riavviato
 
 
 
     ########################
     # SERVIZI
   ########################
+
+  gateway:
+    extends:
+      file: ./fastapi-gateway/docker-compose.yml
+      service: gateway
+    env_file: .env
+    networks:
+      - backend_net
+      - rabbit_net
+      - gateway_net
+
 
   kms-service:
     build: ./KMS-service
@@ -70,30 +64,23 @@ services:
       replicas: 1   # forza una sola istanza, altrimenti si avrebbero certificati diversi
     restart: unless-stopped
 
-  gateway:
-    extends:
-      file: ./fastapi-gateway/docker-compose.yml
-      service: gateway
-    env_file: .env
-
 
   users-service:
-    build: ./users-service
+    extends:
+      file: ./users-service/docker-compose.yml
+      service: users-service
     env_file: .env
-    depends_on:
-      - users-service_db
-      - users-service-migrate
-      - rabbitmq
     networks:
       - backend_net
-    restart: unless-stopped
-
+      - rabbit_net
+      - users_service_net
 
 
 networks:
   gateway_net:
+  users_service_net:
   backend_net:
-  micro_net:
+  rabbit_net:
 
 volumes:
   gateway_db_data:

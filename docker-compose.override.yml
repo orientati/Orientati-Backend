@@ -1,106 +1,24 @@
 services:
   rabbitmq:
-    extends:
-      file: RabbitMQ/docker-compose.override.yml
-      service: rabbitmq
-    restart: unless-stopped
+    ports:
+      - 5672:5672
+      - 15672:15672
 
   kms-service:
-    build: ./KMS-service
-    env_file: .env
-    networks:
-      - backend_net
-    deploy:
-      replicas: 1   # forza una sola istanza, altrimenti si avrebbero certificati diversi
-    restart: unless-stopped
-
-  gateway-migrate:
-    build: ./fastapi-gateway
-    command: alembic upgrade head   # sovrascrive il comando di avvio eseguendo solo le migrazioni
-    env_file: .env
-    depends_on:
-      - gateway_db
-    networks:
-      - backend_net
-      - micro_net
-    deploy:
-      replicas: 1   # forza una sola istanza
-    restart: "no"   # non viene riavviato
-
-  gateway:
-    build: ./fastapi-gateway
-    env_file: .env
     ports:
-      - "8000:8000"
-    depends_on:
-      - gateway_db
-      - gateway-migrate
-      - rabbitmq
-      - kms-service
-      - users-service
-    networks:
-      - backend_net
-      - micro_net
-    restart: unless-stopped
+      - "8001:8000"
+      -
 
   gateway_db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: gateway
     ports:
       - "5431:5432"
-    volumes:
-      - gateway_db_data:/var/lib/postgresql/data
-    networks:
-      - backend_net
-    restart: unless-stopped
 
-
-  users-service-migrate:
-    build: ./users-service
-    command: alembic upgrade head   # sovrascrive il comando di avvio eseguendo solo le migrazioni
-    env_file: .env
-    depends_on:
-      - users-service_db
-    networks:
-      - backend_net
-      - micro_net
-    deploy:
-      replicas: 1   # forza una sola istanza
-    restart: "no"   # non viene riavviato
 
   users-service:
-    build: ./users-service
-    env_file: .env
-    depends_on:
-      - users-service_db
-      - users-service-migrate
-      - rabbitmq
-    networks:
-      - backend_net
-    restart: unless-stopped
+    ports:
+      - "8002:8000"
 
   users-service_db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: users_service
     ports:
       - "5432:5432"
-    volumes:
-      - users_service_db_data:/var/lib/postgresql/data
-    networks:
-      - backend_net
-      - micro_net
-    restart: unless-stopped
 
-networks:
-  backend_net:
-  micro_net:
-
-volumes:
-  gateway_db_data:
-  users_service_db_data:
