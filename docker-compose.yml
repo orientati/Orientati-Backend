@@ -3,6 +3,16 @@ services:
     extends:
       file: RabbitMQ/docker-compose.yml
       service: rabbitmq
+    restart: unless-stopped
+
+  kms-service:
+    build: ./KMS-service
+    env_file: .env
+    networks:
+      - backend_net
+    deploy:
+      replicas: 1   # forza una sola istanza, altrimenti si avrebbero certificati diversi
+    restart: unless-stopped
 
   gateway-migrate:
     build: ./fastapi-gateway
@@ -26,8 +36,12 @@ services:
       - gateway_db
       - gateway-migrate
       - rabbitmq
+      - kms-service
+      - users-service
     networks:
       - backend_net
+      - micro_net
+    restart: unless-stopped
 
   gateway_db:
     image: postgres:16
@@ -36,24 +50,57 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: gateway
     ports:
+      - "5431:5432"
+    volumes:
+      - gateway_db_data:/var/lib/postgresql/data
+    networks:
+      - backend_net
+    restart: unless-stopped
+
+
+  users-service-migrate:
+    build: ./users-service
+    command: alembic upgrade head   # sovrascrive il comando di avvio eseguendo solo le migrazioni
+    env_file: .env
+    depends_on:
+      - users-service_db
+    networks:
+      - backend_net
+      - micro_net
+    deploy:
+      replicas: 1   # forza una sola istanza
+    restart: "no"   # non viene riavviato
+
+  users-service:
+    build: ./users-service
+    env_file: .env
+    depends_on:
+      - users-service_db
+      - users-service-migrate
+      - rabbitmq
+    networks:
+      - backend_net
+    restart: unless-stopped
+
+  users-service_db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: users_service
+    ports:
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - users_service_db_data:/var/lib/postgresql/data
     networks:
       - backend_net
-
-  kms-service:
-    build: ./KMS-service
-    env_file: .env
-    networks:
-      - backend_net
-    deploy:
-      replicas: 1   # forza una sola istanza, altrimenti si avrebbero certificati diversi
+      - micro_net
+    restart: unless-stopped
 
 networks:
   backend_net:
   micro_net:
 
 volumes:
-  db_data:
-
+  gateway_db_data:
+  users_service_db_data:
