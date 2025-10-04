@@ -8,3 +8,7 @@
 [submodule "RabbitMQ"]
 	path = RabbitMQ
 	url = https://github.com/la-gaga-organization/RabbitMQ
+[submodule "users-service"]
+	path = users-service
+	url = https://github.com/la-gaga-organization/users-service
+    branch = develop
