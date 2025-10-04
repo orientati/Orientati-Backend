@@ -1,18 +1,16 @@
 services:
   rabbitmq:
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
 
   kms-service:
     ports:
       - "8001:8000"
-      -
 
   gateway_db:
     ports:
       - "5431:5432"
-
 
   users-service:
     ports:
@@ -21,4 +19,3 @@ services:
   users-service_db:
     ports:
       - "5432:5432"
-
