@@ -13,3 +13,7 @@
 	path = users-service
 	url = https://github.com/la-gaga-organization/users-service
     branch = develop
+[submodule "schools-service"]
+	path = schools-service
+	url = https://github.com/la-gaga-organization/schools-service
+	branch = develop
