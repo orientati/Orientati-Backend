@@ -8,14 +8,22 @@ services:
     ports:
       - "8001:8000"
 
-  gateway_db:
-    ports:
-      - "5431:5432"
-
   users-service:
     ports:
       - "8002:8000"
 
+  schools-service:
+    ports:
+      - "8003:8000"
+
+  gateway_db:
+    ports:
+      - "5431:5432"
+
   users-service_db:
     ports:
       - "5432:5432"
+
+  schools-service_db:
+    ports:
+      - "5433:5432"

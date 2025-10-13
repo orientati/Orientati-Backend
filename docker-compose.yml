@@ -22,6 +22,12 @@ services:
       service: users-service_db
     env_file: .env
 
+  schools-service_db:
+    extends:
+      file: ./schools-service/docker-compose.yml
+      service: schools-service_db
+    env_file: .env
+
   ########################
   # MIGRAZIONI
   ########################
@@ -38,7 +44,11 @@ services:
       service: users-service-migrate
     env_file: .env
 
-
+  schools-service-migrate:
+    extends:
+      file: ./schools-service/docker-compose.yml
+      service: schools-service-migrate
+    env_file: .env
 
     ########################
     # SERVIZI
@@ -75,13 +85,25 @@ services:
       - rabbit_net
       - users_service_net
 
+  schools-service:
+    extends:
+      file: ./schools-service/docker-compose.yml
+      service: schools-service
+    env_file: .env
+    networks:
+      - backend_net
+      - rabbit_net
+      - schools_service_net
+
 
 networks:
   gateway_net:
   users_service_net:
+  schools_service_net:
   backend_net:
   rabbit_net:
 
 volumes:
   gateway_db_data:
   users_service_db_data:
+  schools_service_db_data:
