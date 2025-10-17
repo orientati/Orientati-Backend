@@ -74,7 +74,6 @@ services:
       replicas: 1   # forza una sola istanza, altrimenti si avrebbero certificati diversi
     restart: unless-stopped
 
-
   users-service:
     extends:
       file: ./users-service/docker-compose.yml
