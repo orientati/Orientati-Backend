@@ -22,6 +22,11 @@ services:
       - "8003:8000"
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
 
+  email-service:
+    ports:
+      - "8004:8000"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+
   gateway_db:
     ports:
       - "5431:5432"

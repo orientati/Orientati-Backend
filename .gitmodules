@@ -17,3 +17,7 @@
 	path = schools-service
 	url = https://github.com/la-gaga-organization/schools-service
 	branch = develop
+[submodule "email-service"]
+	path = email-service
+	url = https://github.com/orientati/email-service
+	branch = develop

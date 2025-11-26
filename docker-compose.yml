@@ -94,6 +94,15 @@ services:
       - rabbit_net
       - schools_service_net
 
+  email-service:
+    extends:
+      file: ./email-service/docker-compose.yml
+      service: email-service
+    env_file: .env
+    networks:
+      - backend_net
+      - rabbit_net
+
 
 networks:
   gateway_net:
