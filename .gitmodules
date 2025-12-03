@@ -1,0 +1,24 @@
+[submodule "fastapi-gateway"]
+	path = fastapi-gateway
+	url = https://github.com/la-gaga-organization/fastapi-gateway
+	branch = main
+[submodule "KMS-service"]
+	path = KMS-service
+	url = https://github.com/la-gaga-organization/KMS-service
+	branch = main
+[submodule "RabbitMQ"]
+	path = RabbitMQ
+	url = https://github.com/la-gaga-organization/RabbitMQ
+	branch = main
+[submodule "users-service"]
+	path = users-service
+	url = https://github.com/la-gaga-organization/users-service
+    branch = main
+[submodule "schools-service"]
+	path = schools-service
+	url = https://github.com/la-gaga-organization/schools-service
+	branch = main
+[submodule "email-service"]
+	path = email-service
+	url = https://github.com/orientati/email-service
+	branch = main
