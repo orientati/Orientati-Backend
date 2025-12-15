@@ -1,7 +1,7 @@
 [submodule "fastapi-gateway"]
 	path = fastapi-gateway
 	url = https://github.com/la-gaga-organization/fastapi-gateway
-	branch = mail
+	branch = main
 [submodule "KMS-service"]
 	path = KMS-service
 	url = https://github.com/la-gaga-organization/KMS-service
