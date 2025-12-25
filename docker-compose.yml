@@ -70,6 +70,8 @@ services:
     env_file: .env
     networks:
       - backend_net
+    volumes:
+        - kms_service_certs_data:/app/certs
     deploy:
       replicas: 1   # forza una sola istanza, altrimenti si avrebbero certificati diversi
     restart: unless-stopped
@@ -115,3 +117,4 @@ volumes:
   gateway_db_data:
   users_service_db_data:
   schools_service_db_data:
+  kms_service_certs_data:
