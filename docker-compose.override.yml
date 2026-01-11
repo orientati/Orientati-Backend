@@ -12,6 +12,10 @@ services:
       - "8001:8000"
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
 
+  kms-service_db:
+    ports:
+      - "5430:5432"
+
   users-service:
     ports:
       - "8002:8000"

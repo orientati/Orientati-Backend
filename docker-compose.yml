@@ -5,7 +5,6 @@ services:
       service: rabbitmq
     restart: unless-stopped
 
-
   #######################
   # DATABASE
   ########################
@@ -49,10 +48,9 @@ services:
       file: ./schools-service/docker-compose.yml
       service: schools-service-migrate
     env_file: .env
-
     ########################
     # SERVIZI
-  ########################
+    ########################
 
   gateway:
     extends:
@@ -64,16 +62,29 @@ services:
       - rabbit_net
       - gateway_net
 
+  kms-service_db:
+    extends:
+      file: ./KMS-service/docker-compose.yml
+      service: kms-service_db
+    env_file: .env
+
+  kms-service-migrate:
+    extends:
+      file: ./KMS-service/docker-compose.yml
+      service: kms-service-migrate
+    env_file: .env
 
   kms-service:
-    build: ./KMS-service
+    extends:
+      file: ./KMS-service/docker-compose.yml
+      service: kms-service
     env_file: .env
     networks:
       - backend_net
-    volumes:
-        - kms_service_certs_data:/app/certs
+      - rabbit_net
+      - kms_service_net
     deploy:
-      replicas: 1   # forza una sola istanza, altrimenti si avrebbero certificati diversi
+      replicas: 1
     restart: unless-stopped
 
   users-service:
@@ -105,16 +116,17 @@ services:
       - backend_net
       - rabbit_net
 
-
 networks:
   gateway_net:
   users_service_net:
   schools_service_net:
+  kms_service_net:
   backend_net:
   rabbit_net:
+
 
 volumes:
   gateway_db_data:
   users_service_db_data:
   schools_service_db_data:
-  kms_service_certs_data:
+  kms_service_db_data:
