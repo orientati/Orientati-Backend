@@ -5,6 +5,18 @@ services:
       service: rabbitmq
     restart: unless-stopped
 
+  redis:
+    image: redis:7-alpine
+    container_name: kms_redis
+    networks:
+      - kms_service_net
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   #######################
   # DATABASE
   ########################

@@ -4,6 +4,10 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  redis:
+    ports:
+      - "6379:6379"
+
   gateway:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
 
