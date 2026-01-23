@@ -34,6 +34,7 @@ services:
     env_file: .env
     networks:
       - gateway_net
+      - internal
 
   users-service_db:
     extends:
@@ -81,6 +82,7 @@ services:
       - backend_net
       - rabbit_net
       - gateway_net
+      - internal
 
   kms-service_db:
     extends:
@@ -143,7 +145,8 @@ networks:
   kms_service_net:
   backend_net:
   rabbit_net:
-
+  internal:
+    internal: true
 
 volumes:
   gateway_db_data:
