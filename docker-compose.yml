@@ -27,6 +27,14 @@ services:
       service: gateway_db
     env_file: .env
 
+  gateway-redis:
+    extends:
+      file: ./fastapi-gateway/docker-compose.yml
+      service: gateway-redis
+    env_file: .env
+    networks:
+      - gateway_net
+
   users-service_db:
     extends:
       file: ./users-service/docker-compose.yml
